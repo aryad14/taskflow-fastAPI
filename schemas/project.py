@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 from typing import Optional, List
 from .task import TaskRead
@@ -14,7 +14,8 @@ class ProjectRead(ProjectBase):
     id: int
     owner_id: int
     created_at: datetime
-    tasks: List[TaskRead] = []
+    # Avoid mutable default list
+    tasks: List[TaskRead] = Field(default_factory=list)
 
-    class Config:
-        orm_mode = True
+    # Pydantic v2: enable ORM attribute parsing
+    model_config = ConfigDict(from_attributes=True)

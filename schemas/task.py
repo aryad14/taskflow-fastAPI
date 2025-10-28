@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Optional
 
@@ -17,5 +17,5 @@ class TaskRead(TaskBase):
     assigned_to: Optional[int]
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    # Pydantic v2: enable ORM attribute parsing
+    model_config = ConfigDict(from_attributes=True)

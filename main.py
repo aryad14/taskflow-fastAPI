@@ -2,27 +2,32 @@ from fastapi import FastAPI
 from core.database import Base, engine
 from core.cors import setup_cors
 from core.config import settings
-# Add these imports
-from models import user, project, task
+from api import router as user_router
+from utils.exceptions import app_exception_handler, AppException, http_exception_handler
+from fastapi.exceptions import HTTPException
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+from models import user, project, task 
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="""
-    TaskFlow is a collaborative task management API built with FastAPI and SQLAlchemy. It provides endpoints for user authentication, project creation, and task tracking.
-    """,
+    description="TaskFlow API for collaborative task management",
     version="1.0.0",
-    openapi_url="/api/v1/openapi.json",   # base OpenAPI path
-    docs_url="/docs",                     # Swagger UI
-    redoc_url="/redoc",                   # ReDoc
-    root_path="/api/v1"                   # base API path
+    openapi_url="/api/v1/openapi.json",
 )
 
+# Create tables at startup (after models are imported)
+@app.on_event("startup")
+def on_startup() -> None:
+    Base.metadata.create_all(bind=engine)
+
 setup_cors(app)
+app.include_router(user_router, prefix="/api/v1")
+
+# Global exception handlers
+app.add_exception_handler(AppException, app_exception_handler)
+app.add_exception_handler(HTTPException, http_exception_handler)
 
 @app.get("/", tags=["Health Check"])
 def root():
-    """Health check endpoint to verify API is running."""
-    return {"message": "TaskFlow API is up and running"}
+    """Health check endpoint."""
+    return {"message": "TaskFlow API is up and running 🚀"}
