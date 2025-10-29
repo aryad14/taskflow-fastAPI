@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from core.database import Base, engine
 from core.cors import setup_cors
 from core.config import settings
-from api import router as user_router
+from api import router as auth_router
 from utils.exceptions import app_exception_handler, AppException, http_exception_handler
 from fastapi.exceptions import HTTPException
 
@@ -12,7 +12,7 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     description="TaskFlow API for collaborative task management",
     version="1.0.0",
-    openapi_url="/api/v1/openapi.json",
+    openapi_url="/api/openapi.json",
 )
 
 # Create tables at startup (after models are imported)
@@ -21,7 +21,7 @@ def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
 
 setup_cors(app)
-app.include_router(user_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api")
 
 # Global exception handlers
 app.add_exception_handler(AppException, app_exception_handler)
