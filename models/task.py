@@ -16,4 +16,5 @@ class Task(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     project = relationship("Project", back_populates="tasks")
-    assignee = relationship("User")
+    owner = relationship("User", foreign_keys=[user_id], back_populates="tasks")
+    assignee = relationship("User", foreign_keys=[assigned_to], back_populates="assigned_tasks")

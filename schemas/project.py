@@ -12,10 +12,12 @@ class ProjectCreate(ProjectBase):
 
 class ProjectRead(ProjectBase):
     id: int
-    owner_id: int
     created_at: datetime
     # Avoid mutable default list
     tasks: List[TaskRead] = Field(default_factory=list)
 
     # Pydantic v2: enable ORM attribute parsing
     model_config = ConfigDict(from_attributes=True)
+    
+class ProjectUpdate(ProjectBase):
+    pass

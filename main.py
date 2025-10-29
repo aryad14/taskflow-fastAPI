@@ -7,6 +7,7 @@ from core.config import settings
 from routes.auth.auth_routes import router as auth_router
 from routes.user.user_routes import router as user_router
 from routes.tasks.task_routes import router as task_router
+from routes.projects.project_routes import router as project_router
 
 from utils.exceptions import app_exception_handler, AppException, http_exception_handler
 from fastapi.exceptions import HTTPException
@@ -29,6 +30,7 @@ setup_cors(app)
 app.include_router(auth_router, prefix="/api")
 app.include_router(user_router, prefix="/api")
 app.include_router(task_router, prefix="/api")
+app.include_router(project_router, prefix="/api")
 
 # Global exception handlers
 app.add_exception_handler(AppException, app_exception_handler)
