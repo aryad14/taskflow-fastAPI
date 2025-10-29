@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DATABASE_URL: str
-    PROJECT_NAME: str = "TaskFlow API"
+    PROJECT_NAME: str
 
     class Config:
         env_file = ".env"
