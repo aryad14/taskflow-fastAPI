@@ -1,8 +1,13 @@
 from fastapi import FastAPI
+
 from core.database import Base, engine
 from core.cors import setup_cors
 from core.config import settings
-from api import router as auth_router
+
+from routes.auth.auth_routes import router as auth_router
+from routes.user.user_routes import router as user_router
+from routes.tasks.task_routes import router as task_router
+
 from utils.exceptions import app_exception_handler, AppException, http_exception_handler
 from fastapi.exceptions import HTTPException
 
@@ -22,6 +27,8 @@ def on_startup() -> None:
 
 setup_cors(app)
 app.include_router(auth_router, prefix="/api")
+app.include_router(user_router, prefix="/api")
+app.include_router(task_router, prefix="/api")
 
 # Global exception handlers
 app.add_exception_handler(AppException, app_exception_handler)

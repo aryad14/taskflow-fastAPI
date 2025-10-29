@@ -14,6 +14,28 @@ class UserCreate(UserBase):
         if len(v.encode("utf-8")) > 72:
             raise ValueError("Password must be at most 72 bytes for bcrypt")
         return v
+    
+class UserUpdate(BaseModel):
+    name: str | None = None
+    email: EmailStr | None = None
+    password: str | None = None
+
+    @field_validator("password")
+    @classmethod
+    def ensure_bcrypt_limit(cls, v: str) -> str:
+        if v is not None and len(v.encode("utf-8")) > 72:
+            raise ValueError("Password must be at most 72 bytes for bcrypt")
+        return v
+    
+class UserDelete(BaseModel):
+    password: str
+
+    @field_validator("password")
+    @classmethod
+    def ensure_bcrypt_limit(cls, v: str) -> str:
+        if len(v.encode("utf-8")) > 72:
+            raise ValueError("Password must be at most 72 bytes for bcrypt")
+        return v
 
 class UserRead(UserBase):
     id: int

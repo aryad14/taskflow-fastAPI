@@ -58,10 +58,6 @@ async def login_user(request: Request, db: Session = Depends(get_db_session)):
     access_token = create_access_token({"sub": str(user.id)})
     return Token(access_token=access_token, token_type="bearer")
 
-@router.get("/me", response_model=dict)
-def read_me(current_user: User = Depends(get_current_user)):
-    return response(
-        True,
-        "Current user profile",
-        data=UserRead.model_validate(current_user).model_dump()
-    )
+@router.post('/logout')
+def logout_user(current_user: User = Depends(get_current_user)):
+    return response(True, "User logged out successfully")

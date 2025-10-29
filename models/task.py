@@ -10,6 +10,7 @@ class Task(Base):
     title = Column(String(100), nullable=False)
     description = Column(Text)
     is_completed = Column(Boolean, default=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     project_id = Column(Integer, ForeignKey("projects.id"))
     assigned_to = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())

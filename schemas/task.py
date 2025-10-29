@@ -6,6 +6,7 @@ class TaskBase(BaseModel):
     title: str
     description: Optional[str] = None
     is_completed: bool = False
+    user_id: int
 
 class TaskCreate(TaskBase):
     project_id: int
@@ -19,3 +20,8 @@ class TaskRead(TaskBase):
 
     # Pydantic v2: enable ORM attribute parsing
     model_config = ConfigDict(from_attributes=True)
+
+class TaskUpdate(TaskBase):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    is_completed: Optional[bool] = None
